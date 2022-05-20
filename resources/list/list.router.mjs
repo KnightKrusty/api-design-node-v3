@@ -4,7 +4,7 @@ import controllers from "./list.controllers.mjs";
 const router = express.Router();
 
 // /api/list
-router.route("/").get(controllers.getOne).post(controllers.createOne);
+router.route("/").get(controllers.getMany).post(controllers.createOne);
 
 // /api/list/:id
 router

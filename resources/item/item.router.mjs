@@ -5,7 +5,7 @@ const router = express.Router();
 
 // /api/item
 // router.route("/").get(controllers.getOne);
-router.route("/").get(controllers.getOne).post(controllers.createOne);
+router.route("/").get(controllers.getMany).post(controllers.createOne);
 
 // /api/item/:id
 router
