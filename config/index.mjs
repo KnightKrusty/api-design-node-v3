@@ -1,4 +1,4 @@
-import config from "nodemon/lib/config";
+import { config } from "./dev.mjs";
 
 const env = process.env.NODE_ENV || "development";
 
@@ -16,12 +16,12 @@ const baseConfig = {
 let envConfig = {};
 
 switch (env) {
-  case dev:
-  case development:
-    envConfig = require("./dev").config;
+  case "dev":
+  case "development":
+    envConfig = import("./dev.mjs").config;
     break;
   default:
-    envConfig = require("./dev").config;
+    envConfig = import("./dev.mjs").config;
     break;
 }
 

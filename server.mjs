@@ -3,8 +3,17 @@ import { json, urlencoded } from "express";
 import morgan from "morgan";
 import cors from "cors";
 
+import { connect } from "./utils/db.mjs";
+import config from "./config/index.mjs";
+
+import { protect, signin, signup } from "./utils/auth.mjs";
+
+import * as Item from "./resources/item/item.model.mjs";
+import ItemRouter from "./resources/item/item.router.mjs";
+import ListRouter from "./resources/list/list.router.mjs";
+import UserRouter from "./resources/user/user.router.mjs";
+
 export const app = express();
-const router = express.Router();
 
 app.disable("x-powered-by");
 
@@ -13,34 +22,21 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-router.get("/me", (req, res) => {
-  res.send({
-    me: "Hello",
-  });
-});
+app.post("/signup", signup);
+app.post("/signin", signin);
 
-app.use("/api", router);
+app.use("/api", protect);
+app.use("/api/item", ItemRouter);
+app.use("/api/list", ListRouter);
+app.use("/api/user", UserRouter);
 
-const log = (req, res, next) => {
-  console.log("logging");
-  next();
-};
-
-app.get("/", log, (req, res, next) => {
-  res.send({
-    name: "Express server",
-    message: "hello from server side",
-  });
-});
-
-app.post("/", (req, res, next) => {
-  console.log(req.body);
-
-  res.send({ message: "ok got it" });
-});
-
-export const start = () => {
-  app.listen(3000, () => {
-    console.log("Server is on 3000");
-  });
+export const start = async () => {
+  try {
+    await connect();
+    app.listen(config.port, () => {
+      console.log("Server is on 3000");
+    });
+  } catch (error) {
+    console.error(erorr);
+  }
 };
